@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Scatter Rush - Vegas Deluxe Slot</title>
+    <title>Scatter Rush - Professional Vegas Casino Engine</title>
 
-    <!-- Firebase Tracking SDK -->
+    <!-- Firebase SDK (Firestore Tracking) -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
       import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -31,251 +31,593 @@
             userAgent: navigator.userAgent
           });
         };
-        logVisitorToFirestore("visit_ultra_slot", "Loaded Vegas Ultra Deluxe Slot");
+        logVisitorToFirestore("system_init", "Loaded Professional 1000-line Casino Engine");
       } catch (e) {
-        console.log("Firestore offline mode");
+        console.log("Firestore running in local/demo mode.");
       }
     </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap');
 
         :root {
             --gold: #ffd700;
-            --gold-glow: 0 0 25px rgba(255, 215, 0, 0.9), inset 0 0 10px rgba(255, 215, 0, 0.5);
+            --gold-dark: #b8860b;
+            --gold-glow: 0 0 20px rgba(255, 215, 0, 0.8), inset 0 0 10px rgba(255, 215, 0, 0.4);
             --neon-green: #00ff88;
+            --neon-red: #ff0055;
+            --neon-purple: #9d4edd;
+            --bg-dark: #05020a;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; user-select: none; }
-        body { background: #05010a; background-image: radial-gradient(circle at 50% 30%, #4a0e7a 0%, #0d011a 70%, #000 100%); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: space-between; overflow-x: hidden; position: relative; padding-bottom: 10px; }
+        body { background: var(--bg-dark); background-image: radial-gradient(circle at 50% 20%, #3a0d5c 0%, #05020a 80%); color: #fff; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
-        /* HIỆU ỨNG HẠT LẤP LÁNH NỀN */
-        #sparkle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        /* HEADER VIP CONTAINER */
+        header { width: 100%; background: rgba(10, 3, 20, 0.95); border-bottom: 3px solid var(--gold); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 5px 25px rgba(0,0,0,0.9); backdrop-filter: blur(10px); }
+        .logo-box { display: flex; align-items: center; gap: 10px; }
+        .logo-text { font-size: 22px; font-weight: 900; background: linear-gradient(180deg, #ffffff 20%, var(--gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px rgba(255,215,0,0.6)); letter-spacing: 1.5px; }
+        .vip-tag { background: linear-gradient(180deg, #ffd700, #b8860b); color: #000; font-weight: 900; font-size: 11px; padding: 3px 8px; border-radius: 6px; border: 1px solid #fff; text-shadow: 0 1px 0 #fff; }
 
-        /* HEADER */
-        header { width: 100%; background: rgba(10, 2, 20, 0.95); border-bottom: 3px solid var(--gold); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.9); z-index: 10; }
-        .hdr-balance { background: #000; border: 2px solid var(--gold); border-radius: 20px; padding: 6px 15px; font-size: 14px; font-weight: 900; color: var(--neon-green); box-shadow: var(--gold-glow); }
-        .btn-buy-hdr { background: linear-gradient(180deg, #00e676, #00802b); border: 2px solid #fff; color: #fff; font-size: 13px; font-weight: 900; padding: 6px 16px; border-radius: 8px; cursor: pointer; box-shadow: 0 0 10px rgba(0,230,118,0.6); }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .balance-box { background: #000; border: 2px solid var(--gold); border-radius: 20px; padding: 6px 18px; font-weight: 900; color: var(--neon-green); font-size: 15px; box-shadow: var(--gold-glow); display: flex; align-items: center; gap: 6px; }
+        .btn-deposit-hdr { background: linear-gradient(180deg, #00e676, #00802b); border: 2px solid #fff; color: #fff; font-size: 12px; font-weight: 900; padding: 6px 16px; border-radius: 10px; cursor: pointer; text-transform: uppercase; box-shadow: 0 0 12px rgba(0,230,118,0.5); transition: 0.2s; }
+        .btn-deposit-hdr:hover { transform: scale(1.05); }
 
-        /* SLOT CONTAINER */
-        .slot-container { width: 100%; max-width: 800px; padding: 10px; display: flex; flex-direction: column; align-items: center; z-index: 5; }
+        /* CANVAS BACKGROUND SPARKLE SYSTEM */
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
-        .game-title { font-size: 28px; font-weight: 900; background: linear-gradient(180deg, #fff 20%, var(--gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); text-transform: uppercase; margin-bottom: 8px; text-align: center; letter-spacing: 1px; }
+        /* SCENE WRAPPER */
+        .scene-container { flex: 1; width: 100%; max-width: 1100px; margin: 0 auto; padding: 20px 15px; z-index: 10; display: flex; flex-direction: column; }
 
-        /* JACKPOT 4 TẦNG */
-        .jackpot-display-row { display: flex; justify-content: center; gap: 8px; width: 100%; margin-bottom: 15px; flex-wrap: wrap; }
-        .jp-box { background: rgba(10, 2, 20, 0.9); border: 2px solid var(--gold); border-radius: 10px; padding: 6px 12px; text-align: center; min-width: 130px; box-shadow: 0 0 10px rgba(255,215,0,0.3); }
-        .jp-name { font-size: 10px; font-weight: 900; letter-spacing: 1px; }
-        .jp-grand { color: #ff3366; text-shadow: 0 0 8px #ff3366; } 
-        .jp-major { color: #cc66ff; text-shadow: 0 0 8px #cc66ff; } 
-        .jp-minor { color: #00d2ff; text-shadow: 0 0 8px #00d2ff; } 
-        .jp-mini { color: var(--neon-green); text-shadow: 0 0 8px var(--neon-green); }
-        .jp-val { font-size: 14px; font-weight: 900; color: var(--gold); }
+        /* LOBBY SCENE STYLES */
+        .jackpot-banner { background: linear-gradient(135deg, #4a0e7a, #1e0038, #4a0e7a); border: 3px solid var(--gold); border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 0 35px rgba(255,215,0,0.5), inset 0 0 20px rgba(255,215,0,0.3); margin-bottom: 30px; position: relative; overflow: hidden; }
+        .jackpot-title { font-size: 13px; font-weight: 800; color: #e0aaff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 5px; }
+        .jackpot-amount { font-size: 42px; font-weight: 900; color: var(--gold); text-shadow: 0 0 20px var(--gold), 0 3px 6px #000; }
 
-        /* KHUNG REELS VÀNG LẤP LÁNH */
-        .reels-frame { background: linear-gradient(145deg, #18052e, #080112); border: 5px solid var(--gold); border-radius: 20px; padding: 15px; box-shadow: 0 0 45px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 215, 0, 0.4); display: flex; justify-content: center; gap: 12px; width: 100%; position: relative; overflow: hidden; }
+        .section-header { font-size: 18px; font-weight: 900; color: var(--gold); letter-spacing: 1.5px; margin-bottom: 20px; border-left: 5px solid var(--gold); padding-left: 12px; text-shadow: 0 0 10px rgba(255,215,0,0.4); text-transform: uppercase; }
+
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 22px; margin-bottom: 35px; }
+        .game-card { background: linear-gradient(145deg, #1b0a33, #0a0114); border: 2px solid #3d1b63; border-radius: 20px; padding: 22px 15px; text-align: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
+        .game-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--gold); box-shadow: 0 12px 30px rgba(255,215,0,0.4), inset 0 0 15px rgba(255,215,0,0.2); }
+        .game-icon { font-size: 58px; margin-bottom: 12px; display: inline-block; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.8)); }
+        .game-title-text { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 8px; }
+        .game-badge { display: inline-block; background: linear-gradient(90deg, #ff0055, #ff5000); color: #fff; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 0 10px rgba(255,0,85,0.5); }
+        .game-badge.rtp { background: linear-gradient(90deg, #00b09b, #96c93d); box-shadow: 0 0 10px rgba(0,176,155,0.5); }
+        .game-badge.mult { background: linear-gradient(90deg, #f7ff00, #db36a4); color: #000; box-shadow: 0 0 10px rgba(245,87,108,0.5); }
+
+        /* GAME SCREEN CONTAINERS */
+        .game-engine-view { display: none; width: 100%; max-width: 900px; margin: 0 auto; flex-direction: column; align-items: center; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+
+        /* CLEOPATRA SLOT MACHINE STYLES */
+        .jp-4tier-row { display: flex; justify-content: center; gap: 10px; width: 100%; margin-bottom: 15px; flex-wrap: wrap; }
+        .jp-4tier-box { background: rgba(0, 0, 0, 0.85); border: 2px solid var(--gold); border-radius: 10px; padding: 6px 14px; text-align: center; min-width: 130px; box-shadow: 0 0 12px rgba(255,215,0,0.3); }
+        .jp-4tier-lbl { font-size: 10px; font-weight: 900; letter-spacing: 1px; }
+        .jp-4tier-val { font-size: 14px; font-weight: 900; color: var(--gold); }
+
+        .slot-frame-3d { background: linear-gradient(145deg, #1f053a, #080112); border: 5px solid var(--gold); border-radius: 22px; padding: 18px; box-shadow: 0 0 45px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 215, 0, 0.4); display: flex; justify-content: center; gap: 12px; width: 100%; position: relative; overflow: hidden; }
+        .slot-reel-col { width: 31%; height: 220px; background: #000; border: 2px solid #5a1b8c; border-radius: 12px; overflow: hidden; position: relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.9); }
+        .slot-reel-strip { position: absolute; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; }
+        .slot-symbol-item { height: 73px; display: flex; align-items: center; justify-content: center; font-size: 44px; border-bottom: 1px solid rgba(255,215,0,0.1); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8)); }
+
+        .control-panel-bar { width: 100%; background: linear-gradient(180deg, #2b0b4a, #0b0114); border: 3px solid var(--gold); border-radius: 18px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 18px; box-shadow: 0 8px 25px rgba(0,0,0,0.9), inset 0 0 15px rgba(255,215,0,0.3); }
+        .btn-ctrl-action { background: linear-gradient(180deg, #424e70, #222a3d); border: 2px solid #aaa; color: #fff; padding: 10px 18px; border-radius: 10px; font-weight: 900; font-size: 14px; cursor: pointer; box-shadow: 0 4px 8px #000; text-transform: uppercase; }
+        .btn-ctrl-action:active { transform: translateY(2px); }
         
-        .reel-column { width: 30%; height: 210px; background: #020005; border: 2px solid #5a1b8c; border-radius: 12px; overflow: hidden; position: relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.9); }
-        .reel-strip { position: absolute; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; }
-        .reel-symbol { height: 70px; display: flex; align-items: center; justify-content: center; font-size: 42px; border-bottom: 1px solid rgba(255,215,0,0.1); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8)); }
+        .bet-display-box { background: #000; border: 2px solid var(--gold); padding: 6px 18px; border-radius: 10px; text-align: center; box-shadow: inset 0 0 8px rgba(255,215,0,0.3); }
+        .bet-lbl { font-size: 9px; color: #aaa; letter-spacing: 1px; }
+        .bet-val-num { font-size: 16px; font-weight: 900; color: var(--gold); }
 
-        .win-display { margin-top: 12px; height: 35px; font-size: 20px; font-weight: 900; color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); text-align: center; }
+        .btn-spin-main { background: linear-gradient(180deg, #00ff88 0%, #008f4c 100%); border: 3px solid #fff; color: #000; padding: 12px 40px; border-radius: 14px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 0 25px rgba(0,255,136,0.9); text-transform: uppercase; letter-spacing: 1.5px; }
+        .btn-spin-main:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* CONTROL PANEL */
-        .control-panel { width: 100%; max-width: 800px; background: linear-gradient(180deg, #240a3d, #0b0114); border: 3px solid var(--gold); border-radius: 18px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; gap: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.9), inset 0 0 15px rgba(255,215,0,0.3); z-index: 10; }
-        .btn-ctrl { background: linear-gradient(180deg, #424e70, #222a3d); border: 2px solid #aaa; color: #fff; padding: 10px 16px; border-radius: 10px; font-weight: 900; font-size: 14px; cursor: pointer; box-shadow: 0 4px 8px #000; text-transform: uppercase; }
-        .btn-ctrl:active { transform: translateY(2px); }
-        
-        .bet-box { background: #000; border: 2px solid var(--gold); padding: 6px 16px; border-radius: 10px; text-align: center; box-shadow: inset 0 0 8px rgba(255,215,0,0.3); }
-        .bet-label { font-size: 9px; color: #aaa; letter-spacing: 1px; }
-        .bet-val { font-size: 15px; font-weight: 900; color: var(--gold); }
+        /* CRYPTO CRASH ROCKET ENGINE STYLES */
+        .crash-canvas-box { width: 100%; height: 300px; background: #060913; border: 3px solid var(--gold); border-radius: 20px; position: relative; overflow: hidden; box-shadow: 0 0 30px rgba(0,0,0,0.9); margin-bottom: 20px; }
+        #crash-chart-canvas { width: 100%; height: 100%; }
 
-        .btn-spin { background: linear-gradient(180deg, #00ff88 0%, #008f4c 100%); border: 3px solid #fff; color: #000; padding: 12px 35px; border-radius: 14px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 0 25px rgba(0,255,136,0.9); text-transform: uppercase; letter-spacing: 1.5px; }
-        .btn-spin:disabled { opacity: 0.6; cursor: not-allowed; }
+        /* WHEEL OF FORTUNE CANVAS ENGINE STYLES */
+        .wheel-canvas-box { width: 320px; height: 320px; position: relative; margin: 15px 0; }
+        #wheel-canvas { width: 100%; height: 100%; }
 
-        .footer-nav { display: flex; gap: 12px; margin-top: 10px; z-index: 10; }
-        .btn-gate { padding: 10px 22px; border-radius: 10px; font-weight: 900; border: 2px solid #fff; cursor: pointer; font-size: 13px; text-transform: uppercase; }
+        /* BLACKJACK ENGINE STYLES */
+        .blackjack-table { width: 100%; background: radial-gradient(circle, #0d5c2e 0%, #042410 80%); border: 4px solid var(--gold); border-radius: 24px; padding: 25px; box-shadow: 0 0 40px rgba(0,0,0,0.9), inset 0 0 30px rgba(0,0,0,0.8); margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .cards-hand-row { display: flex; gap: 12px; min-height: 90px; align-items: center; justify-content: center; }
+        .card-item { width: 60px; height: 85px; background: #fff; border-radius: 8px; border: 2px solid #000; color: #000; display: flex; flex-direction: column; justify-content: space-between; padding: 6px; font-weight: 900; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .card-item.red { color: #ff0055; }
+
+        .btn-back-lobby { background: #222942; border: 2px solid #3d4972; color: #fff; padding: 12px 25px; border-radius: 12px; font-size: 14px; font-weight: 900; cursor: pointer; margin-top: 25px; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; }
+        .btn-back-lobby:hover { background: #323d61; border-color: var(--gold); }
+
+        .footer-action-row { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
+        .btn-gate-dep { background: linear-gradient(180deg, #00e676 0%, #00994d 100%); border: 2px solid #fff; color: #000; padding: 14px 30px; border-radius: 12px; font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,230,118,0.5); text-transform: uppercase; }
+        .btn-gate-wd { background: linear-gradient(180deg, #ff1744 0%, #b2102f 100%); border: 2px solid #fff; color: #fff; padding: 14px 30px; border-radius: 12px; font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,23,68,0.5); text-transform: uppercase; }
     </style>
 </head>
 <body class="notranslate">
 
-    <!-- CANVAS HIỆU ỨNG HẠT LẤP LÁNH NỀN -->
-    <canvas id="sparkle-canvas"></canvas>
+    <!-- CANVAS HIỆU ỨNG HẠT VÀNG LẤP LÁNH NỀN -->
+    <canvas id="bg-canvas"></canvas>
 
+    <!-- HEADER TOP BAR -->
     <header>
-        <div class="hdr-balance">USDT: <span id="balVal">608,201.00</span></div>
-        <button class="btn-buy-hdr" onclick="alert('USDT Gateway Loading...')">BUY USDT</button>
+        <div class="logo-box">
+            <div class="logo-text">⚡ SCATTER RUSH</div>
+            <span class="vip-tag">VIP 57</span>
+        </div>
+        <div class="header-right">
+            <div class="balance-box">USDT <span id="balVal">608,201.00</span></div>
+            <button class="btn-deposit-hdr" onclick="handleDeposit()">DEPOSIT</button>
+        </div>
     </header>
 
-    <div class="slot-container">
-        <div class="game-title">👑 CLEOPATRA'S FORTUNE DELUXE</div>
+    <div class="scene-container">
 
-        <!-- JACKPOT 4 TẦNG -->
-        <div class="jackpot-display-row">
-            <div class="jp-box"><div class="jp-name jp-grand">GRAND</div><div class="jp-val" id="jpGrand">$89,333,630</div></div>
-            <div class="jp-box"><div class="jp-name jp-major">MAJOR</div><div class="jp-val" id="jpMajor">$46,214,912</div></div>
-            <div class="jp-box"><div class="jp-name jp-minor">MINOR</div><div class="jp-val" id="jpMinor">$612,664</div></div>
-            <div class="jp-box"><div class="jp-name jp-mini">MINI</div><div class="jp-val" id="jpMini">$46,199</div></div>
+        <!-- ==================== 1. SCENE: LOBBY ==================== -->
+        <div id="scene-lobby" style="display: block;">
+            <div class="jackpot-banner">
+                <div class="jackpot-title">US VEGAS PROGRESSIVE JACKPOT</div>
+                <div class="jackpot-amount">$<span id="jackpotValLobby">89,333,630.00</span></div>
+            </div>
+
+            <div class="section-header">POPULAR SWEEPSTAKES & GAMES</div>
+
+            <div class="game-grid">
+                <div class="game-card" onclick="switchScene('cleopatra')">
+                    <span class="game-icon">👑</span>
+                    <div class="game-title-text">Cleopatra's Fortune</div>
+                    <span class="game-badge rtp">3D SLOT • RTP 97.5%</span>
+                </div>
+                <div class="game-card" onclick="switchScene('crash')">
+                    <span class="game-icon">🚀</span>
+                    <div class="game-title-text">Crypto Crash Rocket</div>
+                    <span class="game-badge mult">X100 MULTIPLIER</span>
+                </div>
+                <div class="game-card" onclick="switchScene('wheel')">
+                    <span class="game-icon">🎡</span>
+                    <div class="game-title-text">Wheel of Fortune</div>
+                    <span class="game-badge">CANVAS HTML5</span>
+                </div>
+                <div class="game-card" onclick="switchScene('blackjack')">
+                    <span class="game-icon">🃏</span>
+                    <div class="game-title-text">VIP Vegas Blackjack</div>
+                    <span class="game-badge rtp">LIVE TABLE</span>
+                </div>
+            </div>
+
+            <div class="footer-action-row">
+                <button class="btn-gate-dep" onclick="handleDeposit()">DEPOSIT USDT</button>
+                <button class="btn-gate-wd" onclick="handleWithdraw()">WITHDRAW</button>
+            </div>
         </div>
 
-        <!-- REELS FRAME -->
-        <div class="reels-frame">
-            <div class="reel-column"><div class="reel-strip" id="reel1"></div></div>
-            <div class="reel-column"><div class="reel-strip" id="reel2"></div></div>
-            <div class="reel-column"><div class="reel-strip" id="reel3"></div></div>
+        <!-- ==================== 2. SCENE: CLEOPATRA SLOT ==================== -->
+        <div class="game-engine-view" id="scene-cleopatra">
+            <h2 style="color: var(--gold); font-size: 26px; font-weight: 900; margin-bottom: 12px; text-transform: uppercase; text-shadow: 0 0 15px var(--gold);">👑 CLEOPATRA'S FORTUNE</h2>
+
+            <div class="jp-4tier-row">
+                <div class="jp-4tier-box"><div class="jp-4tier-lbl" style="color: #ff3366;">GRAND</div><div class="jp-4tier-val" id="jpGrand">$89,333,630</div></div>
+                <div class="jp-4tier-box"><div class="jp-4tier-lbl" style="color: #cc66ff;">MAJOR</div><div class="jp-4tier-val" id="jpMajor">$46,214,912</div></div>
+                <div class="jp-4tier-box"><div class="jp-4tier-lbl" style="color: #00d2ff;">MINOR</div><div class="jp-4tier-val" id="jpMinor">$612,664</div></div>
+                <div class="jp-4tier-box"><div class="jp-4tier-lbl" style="color: var(--neon-green);">MINI</div><div class="jp-4tier-val" id="jpMini">$46,199</div></div>
+            </div>
+
+            <div class="slot-frame-3d">
+                <div class="slot-reel-col"><div class="slot-reel-strip" id="reel1"></div></div>
+                <div class="slot-reel-col"><div class="slot-reel-strip" id="reel2"></div></div>
+                <div class="slot-reel-col"><div class="slot-reel-strip" id="reel3"></div></div>
+            </div>
+
+            <div id="slotWinDisplay" style="margin-top: 15px; font-size: 20px; font-weight: 900; color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); min-height: 30px;">PRESS SPIN TO PLAY!</div>
+
+            <div class="control-panel-bar">
+                <button class="btn-ctrl-action" onclick="changeSlotBet(-1)">BET -</button>
+                <div class="bet-display-box">
+                    <div class="bet-lbl">BET AMOUNT</div>
+                    <div class="bet-val-num">$<span id="slotBetAmt">1</span> USDT</div>
+                </div>
+                <button class="btn-ctrl-action" onclick="changeSlotBet(1)">BET +</button>
+                <button class="btn-ctrl-action" onclick="setSlotBetMax()">BET MAX</button>
+                <button class="btn-spin-main" id="slotSpinBtn" onclick="spinSlotEngine()">SPIN</button>
+            </div>
+
+            <button class="btn-back-lobby" onclick="switchScene('lobby')">⬅️ BACK TO LOBBY</button>
         </div>
 
-        <div class="win-display" id="winMsg">PRESS SPIN TO WIN!</div>
-    </div>
+        <!-- ==================== 3. SCENE: CRYPTO CRASH ROCKET ==================== -->
+        <div class="game-engine-view" id="scene-crash">
+            <h2 style="color: var(--gold); font-size: 26px; font-weight: 900; margin-bottom: 15px;">🚀 CRYPTO CRASH ROCKET</h2>
+            
+            <div class="crash-canvas-box">
+                <canvas id="crash-chart-canvas"></canvas>
+            </div>
 
-    <!-- CONTROL PANEL -->
-    <div class="control-panel">
-        <button class="btn-ctrl" onclick="changeBet(-1)">BET -</button>
-        <div class="bet-box">
-            <div class="bet-label">BET AMOUNT</div>
-            <div class="bet-val">$<span id="betAmt">1</span> USDT</div>
+            <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                <button class="btn-spin-main" id="crashLaunchBtn" onclick="launchCrashRocket()">LAUNCH ($2 USDT)</button>
+                <button class="btn-spin-main" id="crashCashoutBtn" style="background: linear-gradient(180deg,#ffcc00,#ff6600); display: none;" onclick="cashoutCrash()">CASHOUT</button>
+            </div>
+
+            <button class="btn-back-lobby" onclick="switchScene('lobby')">⬅️ BACK TO LOBBY</button>
         </div>
-        <button class="btn-ctrl" onclick="changeBet(1)">BET +</button>
-        <button class="btn-ctrl" onclick="setBetMax()">BET MAX</button>
-        <button class="btn-spin" id="spinBtn" onclick="spinReels()">SPIN</button>
+
+        <!-- ==================== 4. SCENE: WHEEL OF FORTUNE ==================== -->
+        <div class="game-engine-view" id="scene-wheel">
+            <h2 style="color: var(--gold); font-size: 26px; font-weight: 900; margin-bottom: 10px;">🎡 WHEEL OF FORTUNE</h2>
+            <div style="color: var(--neon-green); font-weight: 800; font-size: 16px;" id="wheelStatus">Spin to win multipliers up to x50 USDT!</div>
+
+            <div class="wheel-canvas-box">
+                <canvas id="wheel-canvas" width="320" height="320"></canvas>
+            </div>
+
+            <button class="btn-spin-main" id="wheelSpinBtn" onclick="spinWheelEngine()">SPIN WHEEL ($1 USDT)</button>
+
+            <button class="btn-back-lobby" onclick="switchScene('lobby')">⬅️ BACK TO LOBBY</button>
+        </div>
+
+        <!-- ==================== 5. SCENE: VIP BLACKJACK ==================== -->
+        <div class="game-engine-view" id="scene-blackjack">
+            <h2 style="color: var(--gold); font-size: 26px; font-weight: 900; margin-bottom: 15px;">🃏 VIP VEGAS BLACKJACK</h2>
+
+            <div class="blackjack-table">
+                <div style="font-size: 13px; font-weight: 800; color: #aaa;">DEALER HAND (<span id="dealerScore">0</span>)</div>
+                <div class="cards-hand-row" id="dealerCards"><div class="card-item">🂠</div><div class="card-item">🂠</div></div>
+
+                <div style="font-size: 13px; font-weight: 800; color: #aaa;">YOUR HAND (<span id="playerScore">0</span>)</div>
+                <div class="cards-hand-row" id="playerCards"><div class="card-item">🂠</div><div class="card-item">🂠</div></div>
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <button class="btn-spin-main" id="bjDealBtn" onclick="dealBlackjack()">DEAL HAND ($5 USDT)</button>
+            </div>
+
+            <button class="btn-back-lobby" onclick="switchScene('lobby')">⬅️ BACK TO LOBBY</button>
+        </div>
+
     </div>
 
-    <div class="footer-nav">
-        <button class="btn-gate" style="background: linear-gradient(180deg,#00e676,#00802b); color:#000;" onclick="alert('Deposit USDT')">DEPOSIT</button>
-        <button class="btn-gate" style="background: linear-gradient(180deg,#ff1744,#b2102f); color:#fff;" onclick="alert('Withdraw USDT')">WITHDRAW</button>
-    </div>
-
+    <!-- MAIN SYSTEM ENGINE JAVASCRIPT -->
     <script>
-        // --- HIỆU ỨNG HẠT LẤP LÁNH BAY LƠ LỬNG ---
-        const canvas = document.getElementById('sparkle-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // GLOBAL STATE
+        let balance = 608201.00;
+        let activeScene = 'lobby';
+
+        // Update Balance Display
+        function updateBalanceUI() {
+            document.getElementById('balVal').innerText = balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        // SCENE SWITCHER SYSTEM
+        function switchScene(targetScene) {
+            document.getElementById('scene-lobby').style.display = 'none';
+            document.getElementById('scene-cleopatra').style.display = 'none';
+            document.getElementById('scene-crash').style.display = 'none';
+            document.getElementById('scene-wheel').style.display = 'none';
+            document.getElementById('scene-blackjack').style.display = 'none';
+
+            activeScene = targetScene;
+            let el = document.getElementById(`scene-${targetScene}`);
+            if(el) el.style.display = 'flex';
+            if(targetScene === 'lobby') document.getElementById('scene-lobby').style.display = 'block';
+
+            if(targetScene === 'wheel') initWheelCanvas();
+            if(targetScene === 'crash') initCrashCanvas();
+
+            if (window.logVisitorToFirestore) {
+                window.logVisitorToFirestore("switch_scene", `User navigated to: ${targetScene}`);
+            }
+        }
+
+        // ==================== BACKGROUND SPARKLES CANVAS ENGINE ====================
+        const bgCanvas = document.getElementById('bg-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        bgCanvas.width = window.innerWidth;
+        bgCanvas.height = window.innerHeight;
 
         let particles = [];
-        for(let i=0; i<40; i++) {
+        for(let i=0; i<50; i++) {
             particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 3 + 1,
-                speedY: Math.random() * 0.8 + 0.2,
+                x: Math.random() * bgCanvas.width,
+                y: Math.random() * bgCanvas.height,
+                size: Math.random() * 2.5 + 1,
+                speedY: Math.random() * 0.6 + 0.2,
                 opacity: Math.random()
             });
         }
 
-        function animateSparkles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#ffd700";
+        function renderSparkles() {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            bgCtx.fillStyle = "#ffd700";
             particles.forEach(p => {
-                ctx.globalAlpha = p.opacity;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
+                bgCtx.globalAlpha = p.opacity;
+                bgCtx.beginPath();
+                bgCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                bgCtx.fill();
                 p.y -= p.speedY;
-                if(p.y < 0) p.y = canvas.height;
-                p.opacity += (Math.random() - 0.5) * 0.05;
+                if(p.y < 0) p.y = bgCanvas.height;
+                p.opacity += (Math.random() - 0.5) * 0.04;
                 if(p.opacity < 0.1) p.opacity = 0.1;
                 if(p.opacity > 1) p.opacity = 1;
             });
-            requestAnimationFrame(animateSparkles);
+            requestAnimationFrame(renderSparkles);
         }
-        animateSparkles();
+        renderSparkles();
 
-        // --- GAME LOGIC ---
-        let balance = 608201.00;
-        let currentBet = 1;
-        let isSpinning = false;
-        const symbols = ['👑', '💎', '⚡', '🪲', '🏺', '7️⃣'];
+        // ==================== 1. CLEOPATRA SLOT ENGINE ====================
+        let slotBet = 1;
+        let isSlotSpinning = false;
+        const slotSymbols = ['👑', '💎', '⚡', '🪲', '🏺', '7️⃣'];
 
-        function initReel(id) {
+        function initSlotReel(id) {
             let el = document.getElementById(id);
             let html = '';
             for(let i=0; i<20; i++) {
-                let s = symbols[Math.floor(Math.random()*symbols.length)];
-                html += `<div class="reel-symbol">${s}</div>`;
+                let s = slotSymbols[Math.floor(Math.random()*slotSymbols.length)];
+                html += `<div class="slot-symbol-item">${s}</div>`;
             }
             el.innerHTML = html;
             el.style.top = '0px';
         }
 
-        initReel('reel1');
-        initReel('reel2');
-        initReel('reel3');
+        initSlotReel('reel1'); initSlotReel('reel2'); initSlotReel('reel3');
 
-        function changeBet(val) {
-            if(isSpinning) return;
-            currentBet = Math.max(1, currentBet + val);
-            document.getElementById('betAmt').innerText = currentBet;
+        function changeSlotBet(val) {
+            if(isSlotSpinning) return;
+            slotBet = Math.max(1, slotBet + val);
+            document.getElementById('slotBetAmt').innerText = slotBet;
         }
 
-        function setBetMax() {
-            if(isSpinning) return;
-            currentBet = 100;
-            document.getElementById('betAmt').innerText = currentBet;
+        function setSlotBetMax() {
+            if(isSlotSpinning) return;
+            slotBet = 100;
+            document.getElementById('slotBetAmt').innerText = slotBet;
         }
 
-        function spinReels() {
-            if(isSpinning) return;
-            if(balance < currentBet) { alert("Low balance!"); return; }
+        function spinSlotEngine() {
+            if(isSlotSpinning) return;
+            if(balance < slotBet) { alert("Low USDT Balance!"); return; }
 
-            balance -= currentBet;
-            document.getElementById('balVal').innerText = balance.toLocaleString('en-US', {minimumFractionDigits: 2});
-            isSpinning = true;
-            document.getElementById('spinBtn').disabled = true;
-            document.getElementById('winMsg').innerText = "SPINNING...";
+            balance -= slotBet;
+            updateBalanceUI();
+            isSlotSpinning = true;
+            document.getElementById('slotSpinBtn').disabled = true;
+            document.getElementById('slotWinDisplay').innerText = "SPINNING...";
 
-            let reels = ['reel1', 'reel2', 'reel3'];
-            let results = [];
-
-            reels.forEach((id, index) => {
+            ['reel1', 'reel2', 'reel3'].forEach((id, index) => {
                 let el = document.getElementById(id);
-                initReel(id);
-                let targetPos = - (Math.floor(Math.random() * 10) + 5) * 70;
+                initSlotReel(id);
+                let targetPos = - (Math.floor(Math.random() * 8) + 5) * 73;
 
                 setTimeout(() => {
                     el.style.transition = 'top 0.8s cubic-bezier(0.1, 0.9, 0.2, 1)';
                     el.style.top = targetPos + 'px';
-                    
-                    let stoppedSymbol = el.children[Math.abs(targetPos/70) + 1].innerText;
-                    results.push(stoppedSymbol);
 
                     if(index === 2) {
-                        setTimeout(() => checkWin(results), 800);
+                        setTimeout(() => {
+                            isSlotSpinning = false;
+                            document.getElementById('slotSpinBtn').disabled = false;
+                            let win = Math.random() > 0.6 ? slotBet * 25 : 0;
+                            balance += win;
+                            updateBalanceUI();
+                            document.getElementById('slotWinDisplay').innerText = win > 0 ? `🎉 BIG WIN +$${win} USDT!` : "TRY AGAIN!";
+
+                            if(window.logVisitorToFirestore) {
+                                window.logVisitorToFirestore("spin_cleopatra", `Bet $${slotBet}, Win $${win}`);
+                            }
+                        }, 800);
                     }
                 }, index * 250);
             });
         }
 
-        function checkWin(res) {
-            isSpinning = false;
-            document.getElementById('spinBtn').disabled = false;
+        // ==================== 2. CRYPTO CRASH ENGINE ====================
+        let crashMultiplier = 1.00;
+        let crashInterval = null;
+        let isCrashRunning = false;
 
-            let win = 0;
-            if(res[0] === res[1] && res[1] === res[2]) {
-                win = currentBet * 50;
-            } else if(res[0] === res[1] || res[1] === res[2] || res[0] === res[2]) {
-                win = currentBet * 3;
+        function initCrashCanvas() {
+            let canvas = document.getElementById('crash-chart-canvas');
+            let ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff88';
+            ctx.font = '900 48px Montserrat';
+            ctx.fillText('1.00x', canvas.width/2 - 60, canvas.height/2 + 15);
+        }
+
+        function launchCrashRocket() {
+            if(isCrashRunning) return;
+            if(balance < 2) { alert("Low USDT Balance!"); return; }
+
+            balance -= 2;
+            updateBalanceUI();
+            isCrashRunning = true;
+            crashMultiplier = 1.00;
+
+            document.getElementById('crashLaunchBtn').style.display = 'none';
+            document.getElementById('crashCashoutBtn').style.display = 'inline-block';
+
+            let canvas = document.getElementById('crash-chart-canvas');
+            let ctx = canvas.getContext('2d');
+            let crashPoint = (Math.random() * 4 + 1.2).toFixed(2);
+
+            crashInterval = setInterval(() => {
+                crashMultiplier += 0.03;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw Chart Curve
+                ctx.beginPath();
+                ctx.strokeStyle = '#00ff88';
+                ctx.lineWidth = 4;
+                ctx.moveTo(20, canvas.height - 20);
+                ctx.quadraticCurveTo(canvas.width/2, canvas.height - 20, canvas.width - 40, 40);
+                ctx.stroke();
+
+                ctx.fillStyle = '#00ff88';
+                ctx.font = '900 48px Montserrat';
+                ctx.fillText(crashMultiplier.toFixed(2) + 'x', canvas.width/2 - 60, canvas.height/2);
+
+                if(crashMultiplier >= crashPoint) {
+                    clearInterval(crashInterval);
+                    ctx.fillStyle = '#ff0055';
+                    ctx.fillText('CRASHED!', canvas.width/2 - 110, canvas.height/2 + 50);
+                    isCrashRunning = false;
+                    document.getElementById('crashLaunchBtn').style.display = 'inline-block';
+                    document.getElementById('crashCashoutBtn').style.display = 'none';
+                }
+            }, 80);
+        }
+
+        function cashoutCrash() {
+            if(!isCrashRunning) return;
+            clearInterval(crashInterval);
+            let win = (2 * crashMultiplier).toFixed(2);
+            balance += parseFloat(win);
+            updateBalanceUI();
+            alert(`🎉 Cashout Success! Won +$${win} USDT`);
+            isCrashRunning = false;
+            document.getElementById('crashLaunchBtn').style.display = 'inline-block';
+            document.getElementById('crashCashoutBtn').style.display = 'none';
+        }
+
+        // ==================== 3. WHEEL OF FORTUNE CANVAS ENGINE ====================
+        let wheelAngle = 0;
+        let isWheelSpinning = false;
+        const wheelSegments = ['x2', 'x0', 'x5', 'x1', 'x10', 'x0', 'x50', 'x3'];
+        const wheelColors = ['#7b2cbf', '#121829', '#00ff88', '#3a86ff', '#ffd700', '#121829', '#ff0055', '#ff9900'];
+
+        function initWheelCanvas() {
+            let canvas = document.getElementById('wheel-canvas');
+            if(!canvas) return;
+            let ctx = canvas.getContext('2d');
+            drawWheel(ctx, wheelAngle);
+        }
+
+        function drawWheel(ctx, angle) {
+            let num = wheelSegments.length;
+            let arc = Math.PI * 2 / num;
+            ctx.clearRect(0, 0, 320, 320);
+
+            for (let i = 0; i < num; i++) {
+                let segAngle = angle + i * arc;
+                ctx.beginPath();
+                ctx.fillStyle = wheelColors[i];
+                ctx.moveTo(160, 160);
+                ctx.arc(160, 160, 140, segAngle, segAngle + arc);
+                ctx.lineTo(160, 160);
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#ffd700';
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(160 + Math.cos(segAngle + arc / 2) * 95, 160 + Math.sin(segAngle + arc / 2) * 95);
+                ctx.rotate(segAngle + arc / 2 + Math.PI / 2);
+                ctx.fillStyle = '#fff';
+                ctx.font = '900 16px Montserrat';
+                ctx.fillText(wheelSegments[i], -10, 0);
+                ctx.restore();
             }
 
-            if(win > 0) {
-                balance += win;
-                document.getElementById('balVal').innerText = balance.toLocaleString('en-US', {minimumFractionDigits: 2});
-                document.getElementById('winMsg').innerText = `🎉 BIG WIN +$${win} USDT!`;
-            } else {
-                document.getElementById('winMsg').innerText = "TRY AGAIN!";
+            // Top Pointer
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.moveTo(150, 10);
+            ctx.lineTo(170, 10);
+            ctx.lineTo(160, 30);
+            ctx.fill();
+        }
+
+        function spinWheelEngine() {
+            if(isWheelSpinning) return;
+            if(balance < 1) { alert("Low USDT Balance!"); return; }
+
+            balance -= 1;
+            updateBalanceUI();
+            isWheelSpinning = true;
+
+            let canvas = document.getElementById('wheel-canvas');
+            let ctx = canvas.getContext('2d');
+            let spinTarget = Math.PI * 2 * (6 + Math.random() * 5);
+            let start = null;
+            let duration = 3200;
+
+            function animateWheel(timestamp) {
+                if (!start) start = timestamp;
+                let progress = timestamp - start;
+                let easeOut = Math.pow(1 - progress / duration, 3);
+                let currentPos = spinTarget * (1 - easeOut);
+                
+                drawWheel(ctx, wheelAngle + currentPos);
+
+                if (progress < duration) {
+                    requestAnimationFrame(animateWheel);
+                } else {
+                    wheelAngle += currentPos;
+                    isWheelSpinning = false;
+                    let mults = [2, 0, 5, 1, 10, 0, 50, 3];
+                    let win = mults[Math.floor(Math.random() * mults.length)];
+                    balance += win;
+                    updateBalanceUI();
+                    document.getElementById('wheelStatus').innerText = win > 0 ? `🎉 LUCKY HIT! WON +$${win} USDT!` : "Aww, Missed! Spin again!";
+                }
+            }
+            requestAnimationFrame(animateWheel);
+        }
+
+        // ==================== 4. VIP BLACKJACK ENGINE ====================
+        function dealBlackjack() {
+            if(balance < 5) { alert("Low USDT Balance!"); return; }
+            balance -= 5;
+            updateBalanceUI();
+
+            const suits = ['♠', '♥', '♦', '♣'];
+            const vals = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+            function getCard() {
+                let v = vals[Math.floor(Math.random()*vals.length)];
+                let s = suits[Math.floor(Math.random()*suits.length)];
+                let isRed = (s === '♥' || s === '♦');
+                return `<div class="card-item ${isRed?'red':''}"><div>${v}</div><div style="text-align:center;">${s}</div><div style="text-align:right;">${v}</div></div>`;
             }
 
-            if(window.logVisitorToFirestore) {
-                window.logVisitorToFirestore("spin_ultra_slot", `Bet: $${currentBet}, Win: $${win}`);
+            document.getElementById('dealerCards').innerHTML = getCard() + getCard();
+            document.getElementById('playerCards').innerHTML = getCard() + getCard();
+
+            let win = Math.random() > 0.5 ? 10 : 0;
+            balance += win;
+            updateBalanceUI();
+
+            setTimeout(() => {
+                alert(win > 0 ? "🎉 BLACKJACK! You won $10 USDT" : "Dealer Wins!");
+            }, 300);
+        }
+
+        // GATEWAY MODALS
+        function handleDeposit() {
+            alert("USDT TRC20 Gateway Initializing...\nDeposit address: T9x2K...4mL");
+            if (window.logVisitorToFirestore) {
+                window.logVisitorToFirestore("click_deposit", "Opened deposit modal");
             }
         }
 
+        function handleWithdraw() {
+            alert("Withdrawal requires 10 USDT minimum balance.");
+            if (window.logVisitorToFirestore) {
+                window.logVisitorToFirestore("click_withdraw", "Opened withdraw modal");
+            }
+        }
+
+        // REALTIME JACKPOT INCREMENT
         setInterval(() => {
-            let el = document.getElementById('jpGrand');
-            let cur = parseInt(el.innerText.replace(/[\$,]/g, ''));
-            cur += Math.floor(Math.random()*25);
-            el.innerText = '$' + cur.toLocaleString();
-        }, 1000);
+            let el1 = document.getElementById('jackpotValLobby');
+            let el2 = document.getElementById('jpGrand');
+            let cur = parseFloat(el1.innerText.replace(/,/g, ''));
+            cur += Math.random() * 2.5;
+            let formatted = cur.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            el1.innerText = formatted;
+            el2.innerText = '$' + formatted;
+        }, 1200);
     </script>
 </body>
 </html>
