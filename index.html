@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Scatter Rush - Vegas Sweepstakes & Casino</title>
+    
+    <!-- Firebase SDK (Firestore Tracking) -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      // Dán cấu hình Firebase của bạn vào đây khi cần kết nối
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+
+      try {
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        window.logVisitorToFirestore = async function(actionName, details) {
+          await addDoc(collection(db, "user_activities"), {
+            timestamp: serverTimestamp(),
+            action: actionName,
+            details: details,
+            userAgent: navigator.userAgent,
+            lang: currentLang
+          });
+        };
+        logVisitorToFirestore("visit_lobby", "User entered Vegas lobby");
+      } catch (e) {
+        console.log("Firestore running in offline/demo mode.");
+      }
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #0a0b10;
+            --card-bg: rgba(23, 27, 44, 0.85);
+            --gold: #ffd700;
+            --gold-glow: rgba(255, 215, 0, 0.4);
+            --neon-green: #00ffcc;
+            --neon-purple: #9d4edd;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background: var(--bg-main); background-image: radial-gradient(circle at 50% 0%, #201335 0%, #0a0b10 70%); color: #fff; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        
+        /* Header & Navigation */
+        header { background: rgba(15, 18, 31, 0.9); backdrop-filter: blur(10px); padding: 12px 20px; border-bottom: 1px solid rgba(255, 215, 0, 0.3); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .logo { font-size: 20px; font-weight: 900; background: linear-gradient(45deg, #ffd700, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1.5px; filter: drop-shadow(0 0 8px var(--gold-glow)); }
+        
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .lang-select { background: #181d30; color: #fff; border: 1px solid #3d466e; padding: 5px 10px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; outline: none; }
+        .balance-box { background: linear-gradient(135deg, #161b2e, #0f1322); padding: 6px 14px; border-radius: 20px; border: 1px solid var(--gold); font-weight: bold; color: var(--neon-green); font-size: 14px; box-shadow: 0 0 10px rgba(0, 255, 204, 0.2); }
+
+        /* Main Container */
+        .main-container { flex: 1; padding: 20px 15px; max-width: 1000px; margin: 0 auto; width: 100%; }
+        
+        /* Live Progressive Jackpot Banner */
+        .jackpot-banner { background: linear-gradient(90deg, #3c096c, #5a189a, #3c096c); border-radius: 16px; padding: 20px; margin-bottom: 25px; text-align: center; border: 2px solid var(--gold); box-shadow: 0 0 25px rgba(157, 78, 221, 0.5); position: relative; overflow: hidden; }
+        .jackpot-title { font-size: 14px; font-weight: 800; color: #e0aaff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+        .jackpot-amount { font-size: 36px; font-weight: 900; color: var(--gold); text-shadow: 0 0 15px var(--gold); }
+
+        /* Lobby Grid */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-title { font-size: 18px; font-weight: 800; color: #fff; border-left: 4px solid var(--gold); padding-left: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; margin-bottom: 30px; }
+        .game-card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden; backdrop-filter: blur(5px); }
+        .game-card:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(255, 215, 0, 0.25); }
+        .game-icon { font-size: 48px; margin-bottom: 12px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
+        .game-name { font-size: 16px; font-weight: 800; margin-bottom: 6px; color: #fff; }
+        .game-tag { display: inline-block; background: linear-gradient(45deg, #ff0055, #ff5000); color: #fff; font-size: 10px; padding: 3px 10px; border-radius: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .game-tag.hot { background: linear-gradient(45deg, #ff9900, #ff0055); }
+        .game-tag.live { background: linear-gradient(45deg, #00b09b, #96c93d); }
+
+        /* Action Buttons */
+        .footer-actions { display: flex; gap: 15px; justify-content: center; margin-top: 25px; }
+        .btn { padding: 14px 30px; font-size: 16px; font-weight: 800; border: none; border-radius: 12px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-deposit { background: linear-gradient(180deg, #00e676 0%, #00a843 100%); color: #000; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.4); }
+        .btn-withdraw { background: linear-gradient(180deg, #ff1744 0%, #b2102f 100%); color: #fff; box-shadow: 0 4px 15px rgba(255, 23, 68, 0.4); }
+        .btn:hover { transform: scale(1.03); }
+
+        /* Modal / Dynamic Game Area */
+        #game-view { display: none; background: rgba(18, 22, 38, 0.95); border: 2px solid var(--gold); border-radius: 20px; padding: 25px; margin-top: 20px; text-align: center; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
+        
+        /* Game Component Styles */
+        .slot-reels { display: flex; justify-content: center; gap: 12px; margin: 20px 0; }
+        .reel { width: 80px; height: 90px; background: #0b0e17; border: 2px solid #2d3555; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        
+        .crash-chart { width: 100%; height: 150px; background: #0b0e17; border-radius: 12px; margin: 15px 0; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 900; color: var(--neon-green); border: 1px solid #2d3555; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">⚡ SCATTER RUSH</div>
+        <div class="header-right">
+            <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="en">🇺🇸 EN</option>
+                <option value="es">🇲🇽 ES</option>
+            </select>
+            <div class="balance-box">USDT: <span id="balance">100.00</span></div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Progressive Jackpot Display -->
+        <div class="jackpot-banner">
+            <div class="jackpot-title" id="txtJackpotTitle">US VEGAS PROGRESSIVE JACKPOT</div>
+            <div class="jackpot-amount">$<span id="jackpotVal">1,248,590.25</span></div>
+        </div>
+
+        <div class="section-header">
+            <div class="section-title" id="txtFeatured">POPULAR SWEEPSTAKES</div>
+        </div>
+
+        <div class="game-grid">
+            <div class="game-card" onclick="openGame('slot')">
+                <div class="game-icon">🎰</div>
+                <div class="game-name">Scatter Rush Slots</div>
+                <span class="game-tag hot">RTP 97.2%</span>
+            </div>
+            <div class="game-card" onclick="openGame('crash')">
+                <div class="game-icon">🚀</div>
+                <div class="game-name">Crypto Crash</div>
+                <span class="game-tag">MULTIPLIER</span>
+            </div>
+            <div class="game-card" onclick="openGame('blackjack')">
+                <div class="game-icon">🃏</div>
+                <div class="game-name">Vegas Blackjack</div>
+                <span class="game-tag live">LIVE TABLE</span>
+            </div>
+            <div class="game-card" onclick="openGame('wheel')">
+                <div class="game-icon">🎡</div>
+                <div class="game-name">Wheel of Fortune</div>
+                <span class="game-tag hot">MAX x1000</span>
+            </div>
+        </div>
+
+        <!-- Dynamic Game Screen -->
+        <div id="game-view">
+            <h2 id="active-game-title" style="color: var(--gold); margin-bottom: 15px;">GAME TITLE</h2>
+            <div id="game-stage"></div>
+            <br>
+            <button class="btn" style="background: #2a2e45; color: #fff; padding: 10px 20px;" onclick="closeGame()" id="btnBack">BACK TO LOBBY</button>
+        </div>
+
+        <div class="footer-actions">
+            <button class="btn btn-deposit" onclick="handleDeposit()" id="btnDeposit">DEPOSIT USDT</button>
+            <button class="btn btn-withdraw" onclick="handleWithdraw()" id="btnWithdraw">WITHDRAW</button>
+        </div>
+    </div>
+
+    <script>
+        let balance = 100.00;
+        let currentLang = 'en';
+
+        const i18n = {
+            en: {
+                jackpotTitle: "US VEGAS PROGRESSIVE JACKPOT",
+                featured: "POPULAR SWEEPSTAKES",
+                deposit: "DEPOSIT USDT",
+                withdraw: "WITHDRAW",
+                back: "BACK TO LOBBY",
+                spin: "SPIN ($1 USDT)",
+                launch: "LAUNCH ROCKET ($2 USDT)",
+                deal: "DEAL HAND ($5 USDT)",
+                spinWheel: "SPIN WHEEL ($1 USDT)"
+            },
+            es: {
+                jackpotTitle: "JACKPOT PROGRESIVO VEGAS US",
+                featured: "JUEGOS POPULARES",
+                deposit: "DEPOSITAR USDT",
+                withdraw: "RETIRAR",
+                back: "VOLVER AL LOBBY",
+                spin: "GIRAR ($1 USDT)",
+                launch: "LANZAR COHETE ($2 USDT)",
+                deal: "REPARTIR CARTAS ($5 USDT)",
+                spinWheel: "GIRAR RUEDA ($1 USDT)"
+            }
+        };
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('txtJackpotTitle').innerText = i18n[lang].jackpotTitle;
+            document.getElementById('txtFeatured').innerText = i18n[lang].featured;
+            document.getElementById('btnDeposit').innerText = i18n[lang].deposit;
+            document.getElementById('btnWithdraw').innerText = i18n[lang].withdraw;
+            document.getElementById('btnBack').innerText = i18n[lang].back;
+            
+            if (window.logVisitorToFirestore) {
+                window.logVisitorToFirestore("change_language", `Switched to ${lang}`);
+            }
+        }
+
+        // Tăng tự động giá trị Jackpot nhảy theo thời gian thực
+        setInterval(() => {
+            let el = document.getElementById('jackpotVal');
+            let cur = parseFloat(el.innerText.replace(/,/g, ''));
+            cur += (Math.random() * 0.5);
+            el.innerText = cur.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }, 2000);
+
+        function openGame(type) {
+            document.getElementById('game-view').style.display = 'block';
+            let stage = document.getElementById('game-stage');
+            let title = document.getElementById('active-game-title');
+
+            if(type === 'slot') {
+                title.innerText = "⚡ SCATTER RUSH SLOTS";
+                stage.innerHTML = `
+                    <div class="slot-reels">
+                        <div class="reel" id="r1">💎</div>
+                        <div class="reel" id="r2">⚡</div>
+                        <div class="reel" id="r3">👑</div>
+                    </div>
+                    <div id="slotMsg" style="margin: 10px; font-weight: bold; color: var(--neon-green);">Match 3 symbols to win Big!</div>
+                    <button class="btn btn-deposit" onclick="playSlot()">${i18n[currentLang].spin}</button>
+                `;
+            } else if(type === 'crash') {
+                title.innerText = "🚀 CRYPTO CRASH";
+                stage.innerHTML = `
+                    <div class="crash-chart" id="crashVal">1.00x</div>
+                    <button class="btn btn-deposit" onclick="playCrash()">${i18n[currentLang].launch}</button>
+                `;
+            } else if(type === 'blackjack') {
+                title.innerText = "🃏 VIP BLACKJACK";
+                stage.innerHTML = `
+                    <div style="font-size: 32px; margin: 15px 0;">🂠 🂡 VS 🂮 🃁</div>
+                    <button class="btn btn-deposit" onclick="playBlackjack()">${i18n[currentLang].deal}</button>
+                `;
+            } else if(type === 'wheel') {
+                title.innerText = "🎡 WHEEL OF FORTUNE";
+                stage.innerHTML = `
+                    <div style="font-size: 60px; margin: 10px 0;">🎯</div>
+                    <button class="btn btn-deposit" onclick="playWheel()">${i18n[currentLang].spinWheel}</button>
+                `;
+            }
+
+            if (window.logVisitorToFirestore) {
+                window.logVisitorToFirestore("open_game", `Selected game: ${type}`);
+            }
+        }
+
+        function closeGame() {
+            document.getElementById('game-view').style.display = 'none';
+        }
+
+        // Logic Game
+        function playSlot() {
+            if(balance < 1) { alert("Low USDT balance!"); return; }
+            balance -= 1;
+            const syms = ['💎', '⚡', '👑', '7️⃣', '🔔'];
+            let r1 = syms[Math.floor(Math.random()*syms.length)];
+            let r2 = syms[Math.floor(Math.random()*syms.length)];
+            let r3 = syms[Math.floor(Math.random()*syms.length)];
+            
+            document.getElementById('r1').innerText = r1;
+            document.getElementById('r2').innerText = r2;
+            document.getElementById('r3').innerText = r3;
+
+            let win = 0;
+            if(r1 === r2 && r2 === r3) win = 25;
+            else if(r1 === '⚡' || r2 === '⚡' || r3 === '⚡') win = 2;
+
+            balance += win;
+            document.getElementById('balance').innerText = balance.toFixed(2);
+            document.getElementById('slotMsg').innerText = win > 0 ? `🎉 WIN +$${win} USDT!` : "Try again!";
+
+            if (window.logVisitorToFirestore) {
+                window.logVisitorToFirestore("play_slot", `Bet $1, Win $${win}, Balance $${balance}`);
+            }
+        }
+
+        function playCrash() {
+            if(balance < 2) { alert("Low USDT balance!"); return; }
+            balance -= 2;
+            let mult = (Math.random() * 4 + 1).toFixed(2);
+            document.getElementById('crashVal').innerText = mult + "x";
+            let win = mult > 2.0 ? 4 : 0;
+            balance += win;
+            document.getElementById('balance').innerText = balance.toFixed(2);
+        }
+
+        function playBlackjack() {
+            if(balance < 5) { alert("Low USDT balance!"); return; }
+            balance -= 5;
+            let win = Math.random() > 0.5 ? 10 : 0;
+            balance += win;
+            document.getElementById('balance').innerText = balance.toFixed(2);
+            alert(win > 0 ? "BLACKJACK! You Won $10 USDT" : "Dealer Won!");
+        }
+
+        function playWheel() {
+            if(balance < 1) { alert("Low USDT balance!"); return; }
+            balance -= 1;
+            let win = Math.random() > 0.7 ? 5 : 0;
+            balance += win;
+            document.getElementById('balance').innerText = balance.toFixed(2);
+            alert(win > 0 ? "Lucky Spin! Won $5 USDT" : "Better luck next spin!");
+        }
+
+        function handleDeposit() {
+            alert('USDT TRC20 Gateway initializing...');
+            if (window.logVisitorToFirestore) {
+                window.logVisitorToFirestore("click_deposit", "Opened deposit modal");
+            }
+        }
+
+        function handleWithdraw() {
+            alert('Minimum withdrawal requirement: 10 USDT');
+            if (window.logVisitorToFirestore) {
+                window.logVisitorToFirestore("click_withdraw", "Opened withdraw modal");
+            }
+        }
+    </script>
+</body>
+</html>
