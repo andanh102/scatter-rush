@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Scatter Rush - Cleopatra's Fortune Slot</title>
+    <title>Scatter Rush - Vegas Deluxe Slot</title>
 
     <!-- Firebase Tracking SDK -->
     <script type="module">
@@ -31,7 +31,7 @@
             userAgent: navigator.userAgent
           });
         };
-        logVisitorToFirestore("visit_cleopatra_slot", "Loaded Cleopatra 3D Animated Slot Engine");
+        logVisitorToFirestore("visit_ultra_slot", "Loaded Vegas Ultra Deluxe Slot");
       } catch (e) {
         console.log("Firestore offline mode");
       }
@@ -42,59 +42,65 @@
 
         :root {
             --gold: #ffd700;
-            --gold-glow: 0 0 15px rgba(255, 215, 0, 0.8);
-            --purple-bg: radial-gradient(circle at 50% 30%, #3a0d5c 0%, #0c0217 85%);
+            --gold-glow: 0 0 25px rgba(255, 215, 0, 0.9), inset 0 0 10px rgba(255, 215, 0, 0.5);
+            --neon-green: #00ff88;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; user-select: none; }
-        body { background: #07020d; background-image: var(--purple-bg); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: space-between; overflow-x: hidden; padding-bottom: 10px; }
+        body { background: #05010a; background-image: radial-gradient(circle at 50% 30%, #4a0e7a 0%, #0d011a 70%, #000 100%); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: space-between; overflow-x: hidden; position: relative; padding-bottom: 10px; }
 
-        /* HEADER TOP STRIP */
-        header { width: 100%; background: rgba(10, 2, 20, 0.95); border-bottom: 2px solid var(--gold); padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.8); }
-        .hdr-balance { background: #000; border: 2px solid var(--gold); border-radius: 20px; padding: 4px 12px; font-size: 13px; font-weight: 900; color: #00ffcc; box-shadow: var(--gold-glow); }
-        .btn-buy-hdr { background: linear-gradient(180deg, #00e676, #00802b); border: 2px solid #fff; color: #fff; font-size: 12px; font-weight: 900; padding: 4px 12px; border-radius: 6px; cursor: pointer; }
+        /* HIỆU ỨNG HẠT LẤP LÁNH NỀN */
+        #sparkle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
-        /* SLOT MACHINE CABINET */
-        .slot-container { width: 100%; max-width: 850px; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        /* HEADER */
+        header { width: 100%; background: rgba(10, 2, 20, 0.95); border-bottom: 3px solid var(--gold); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.9); z-index: 10; }
+        .hdr-balance { background: #000; border: 2px solid var(--gold); border-radius: 20px; padding: 6px 15px; font-size: 14px; font-weight: 900; color: var(--neon-green); box-shadow: var(--gold-glow); }
+        .btn-buy-hdr { background: linear-gradient(180deg, #00e676, #00802b); border: 2px solid #fff; color: #fff; font-size: 13px; font-weight: 900; padding: 6px 16px; border-radius: 8px; cursor: pointer; box-shadow: 0 0 10px rgba(0,230,118,0.6); }
 
-        /* TITLE & JACKPOT DISPLAY */
-        .game-title { font-size: 26px; font-weight: 900; color: var(--gold); text-shadow: 0 0 15px var(--gold), 0 2px 4px #000; text-transform: uppercase; margin-bottom: 8px; text-align: center; }
-        
-        .jackpot-display-row { display: flex; justify-content: center; gap: 8px; width: 100%; margin-bottom: 12px; flex-wrap: wrap; }
-        .jp-box { background: rgba(0, 0, 0, 0.8); border: 2px solid var(--gold); border-radius: 8px; padding: 4px 10px; text-align: center; min-width: 120px; }
+        /* SLOT CONTAINER */
+        .slot-container { width: 100%; max-width: 800px; padding: 10px; display: flex; flex-direction: column; align-items: center; z-index: 5; }
+
+        .game-title { font-size: 28px; font-weight: 900; background: linear-gradient(180deg, #fff 20%, var(--gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); text-transform: uppercase; margin-bottom: 8px; text-align: center; letter-spacing: 1px; }
+
+        /* JACKPOT 4 TẦNG */
+        .jackpot-display-row { display: flex; justify-content: center; gap: 8px; width: 100%; margin-bottom: 15px; flex-wrap: wrap; }
+        .jp-box { background: rgba(10, 2, 20, 0.9); border: 2px solid var(--gold); border-radius: 10px; padding: 6px 12px; text-align: center; min-width: 130px; box-shadow: 0 0 10px rgba(255,215,0,0.3); }
         .jp-name { font-size: 10px; font-weight: 900; letter-spacing: 1px; }
-        .jp-grand { color: #ff3366; } .jp-major { color: #cc66ff; } .jp-minor { color: #00d2ff; } .jp-mini { color: #00ff88; }
-        .jp-val { font-size: 13px; font-weight: 900; color: var(--gold); }
+        .jp-grand { color: #ff3366; text-shadow: 0 0 8px #ff3366; } 
+        .jp-major { color: #cc66ff; text-shadow: 0 0 8px #cc66ff; } 
+        .jp-minor { color: #00d2ff; text-shadow: 0 0 8px #00d2ff; } 
+        .jp-mini { color: var(--neon-green); text-shadow: 0 0 8px var(--neon-green); }
+        .jp-val { font-size: 14px; font-weight: 900; color: var(--gold); }
 
-        /* REELS FRAME - LỘNG LẪY KHUNG VÀNG */
-        .reels-frame { background: rgba(15, 3, 28, 0.9); border: 4px solid var(--gold); border-radius: 16px; padding: 12px; box-shadow: 0 0 35px rgba(255, 215, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.3); display: flex; justify-content: center; gap: 10px; width: 100%; position: relative; overflow: hidden; }
+        /* KHUNG REELS VÀNG LẤP LÁNH */
+        .reels-frame { background: linear-gradient(145deg, #18052e, #080112); border: 5px solid var(--gold); border-radius: 20px; padding: 15px; box-shadow: 0 0 45px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 215, 0, 0.4); display: flex; justify-content: center; gap: 12px; width: 100%; position: relative; overflow: hidden; }
+        
+        .reel-column { width: 30%; height: 210px; background: #020005; border: 2px solid #5a1b8c; border-radius: 12px; overflow: hidden; position: relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.9); }
+        .reel-strip { position: absolute; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; }
+        .reel-symbol { height: 70px; display: flex; align-items: center; justify-content: center; font-size: 42px; border-bottom: 1px solid rgba(255,215,0,0.1); filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8)); }
 
-        /* REEL COLUMN ANIMATION */
-        .reel-column { width: 30%; height: 210px; background: #000; border: 2px solid #3d1b63; border-radius: 10px; overflow: hidden; position: relative; }
-        .reel-strip { position: absolute; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; transition: top 0.1s ease-out; }
-        .reel-symbol { height: 70px; display: flex; align-items: center; justify-content: center; font-size: 40px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .win-display { margin-top: 12px; height: 35px; font-size: 20px; font-weight: 900; color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green); text-align: center; }
 
-        /* WIN BANNER */
-        .win-display { margin-top: 10px; height: 35px; font-size: 18px; font-weight: 900; color: #00ff88; text-shadow: 0 0 10px #00ff88; text-align: center; }
-
-        /* CONTROL PANEL BAR */
-        .control-panel { width: 100%; max-width: 850px; background: linear-gradient(180deg, #1f0836, #090112); border: 2px solid var(--gold); border-radius: 16px; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; gap: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.8); }
-        .btn-ctrl { background: linear-gradient(180deg, #3a445d, #1e2436); border: 2px solid #888; color: #fff; padding: 10px 14px; border-radius: 10px; font-weight: 900; font-size: 13px; cursor: pointer; box-shadow: 0 3px 6px #000; text-transform: uppercase; }
+        /* CONTROL PANEL */
+        .control-panel { width: 100%; max-width: 800px; background: linear-gradient(180deg, #240a3d, #0b0114); border: 3px solid var(--gold); border-radius: 18px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; gap: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.9), inset 0 0 15px rgba(255,215,0,0.3); z-index: 10; }
+        .btn-ctrl { background: linear-gradient(180deg, #424e70, #222a3d); border: 2px solid #aaa; color: #fff; padding: 10px 16px; border-radius: 10px; font-weight: 900; font-size: 14px; cursor: pointer; box-shadow: 0 4px 8px #000; text-transform: uppercase; }
         .btn-ctrl:active { transform: translateY(2px); }
         
-        .bet-box { background: #000; border: 1px solid var(--gold); padding: 6px 12px; border-radius: 8px; text-align: center; }
-        .bet-label { font-size: 9px; color: #aaa; }
-        .bet-val { font-size: 14px; font-weight: 900; color: var(--gold); }
+        .bet-box { background: #000; border: 2px solid var(--gold); padding: 6px 16px; border-radius: 10px; text-align: center; box-shadow: inset 0 0 8px rgba(255,215,0,0.3); }
+        .bet-label { font-size: 9px; color: #aaa; letter-spacing: 1px; }
+        .bet-val { font-size: 15px; font-weight: 900; color: var(--gold); }
 
-        /* BIG SPIN BUTTON */
-        .btn-spin { background: linear-gradient(180deg, #00e676 0%, #00802b 100%); border: 3px solid #fff; color: #fff; padding: 12px 30px; border-radius: 14px; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 0 20px rgba(0,230,118,0.8); text-transform: uppercase; letter-spacing: 1px; }
-        .btn-spin:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-spin { background: linear-gradient(180deg, #00ff88 0%, #008f4c 100%); border: 3px solid #fff; color: #000; padding: 12px 35px; border-radius: 14px; font-size: 22px; font-weight: 900; cursor: pointer; box-shadow: 0 0 25px rgba(0,255,136,0.9); text-transform: uppercase; letter-spacing: 1.5px; }
+        .btn-spin:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .footer-nav { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-gate { padding: 10px 20px; border-radius: 10px; font-weight: 900; border: none; cursor: pointer; font-size: 13px; }
+        .footer-nav { display: flex; gap: 12px; margin-top: 10px; z-index: 10; }
+        .btn-gate { padding: 10px 22px; border-radius: 10px; font-weight: 900; border: 2px solid #fff; cursor: pointer; font-size: 13px; text-transform: uppercase; }
     </style>
 </head>
 <body class="notranslate">
+
+    <!-- CANVAS HIỆU ỨNG HẠT LẤP LÁNH NỀN -->
+    <canvas id="sparkle-canvas"></canvas>
 
     <header>
         <div class="hdr-balance">USDT: <span id="balVal">608,201.00</span></div>
@@ -102,9 +108,9 @@
     </header>
 
     <div class="slot-container">
-        <div class="game-title">👑 CLEOPATRA'S FORTUNE</div>
+        <div class="game-title">👑 CLEOPATRA'S FORTUNE DELUXE</div>
 
-        <!-- 4-TIER VEGAS JACKPOT DISPLAY -->
+        <!-- JACKPOT 4 TẦNG -->
         <div class="jackpot-display-row">
             <div class="jp-box"><div class="jp-name jp-grand">GRAND</div><div class="jp-val" id="jpGrand">$89,333,630</div></div>
             <div class="jp-box"><div class="jp-name jp-major">MAJOR</div><div class="jp-val" id="jpMajor">$46,214,912</div></div>
@@ -122,7 +128,7 @@
         <div class="win-display" id="winMsg">PRESS SPIN TO WIN!</div>
     </div>
 
-    <!-- VEGAS CONTROL PANEL -->
+    <!-- CONTROL PANEL -->
     <div class="control-panel">
         <button class="btn-ctrl" onclick="changeBet(-1)">BET -</button>
         <div class="bet-box">
@@ -140,13 +146,47 @@
     </div>
 
     <script>
+        // --- HIỆU ỨNG HẠT LẤP LÁNH BAY LƠ LỬNG ---
+        const canvas = document.getElementById('sparkle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        for(let i=0; i<40; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 3 + 1,
+                speedY: Math.random() * 0.8 + 0.2,
+                opacity: Math.random()
+            });
+        }
+
+        function animateSparkles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#ffd700";
+            particles.forEach(p => {
+                ctx.globalAlpha = p.opacity;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                p.y -= p.speedY;
+                if(p.y < 0) p.y = canvas.height;
+                p.opacity += (Math.random() - 0.5) * 0.05;
+                if(p.opacity < 0.1) p.opacity = 0.1;
+                if(p.opacity > 1) p.opacity = 1;
+            });
+            requestAnimationFrame(animateSparkles);
+        }
+        animateSparkles();
+
+        // --- GAME LOGIC ---
         let balance = 608201.00;
         let currentBet = 1;
         let isSpinning = false;
-
         const symbols = ['👑', '💎', '⚡', '🪲', '🏺', '7️⃣'];
 
-        // TẠO CHUỖI BIỂU TƯỢNG VÀ KHỞI TẠO CUỘN QUAY
         function initReel(id) {
             let el = document.getElementById(id);
             let html = '';
@@ -174,7 +214,6 @@
             document.getElementById('betAmt').innerText = currentBet;
         }
 
-        // HOẠT ẢNH QUAY TRUỘT DỌC CỦA CÁC CUỘN SLOTS
         function spinReels() {
             if(isSpinning) return;
             if(balance < currentBet) { alert("Low balance!"); return; }
@@ -190,23 +229,20 @@
 
             reels.forEach((id, index) => {
                 let el = document.getElementById(id);
-                initReel(id); // Tạo chuỗi ngẫu nhiên mới
-                
-                let targetPos = - (Math.floor(Math.random() * 10) + 5) * 70; // Vị trí dừng
-                let duration = 1000 + (index * 400); // Tốc độ dừng từng cột theo thứ tự
+                initReel(id);
+                let targetPos = - (Math.floor(Math.random() * 10) + 5) * 70;
 
                 setTimeout(() => {
                     el.style.transition = 'top 0.8s cubic-bezier(0.1, 0.9, 0.2, 1)';
                     el.style.top = targetPos + 'px';
                     
-                    // Lấy biểu tượng dừng lại ở giữa
                     let stoppedSymbol = el.children[Math.abs(targetPos/70) + 1].innerText;
                     results.push(stoppedSymbol);
 
                     if(index === 2) {
                         setTimeout(() => checkWin(results), 800);
                     }
-                }, index * 200);
+                }, index * 250);
             });
         }
 
@@ -230,17 +266,16 @@
             }
 
             if(window.logVisitorToFirestore) {
-                window.logVisitorToFirestore("spin_cleopatra", `Bet: $${currentBet}, Win: $${win}`);
+                window.logVisitorToFirestore("spin_ultra_slot", `Bet: $${currentBet}, Win: $${win}`);
             }
         }
 
-        // TĂNG GIÁ TRỊ JACKPOT TỰ ĐỘNG
         setInterval(() => {
             let el = document.getElementById('jpGrand');
             let cur = parseInt(el.innerText.replace(/[\$,]/g, ''));
-            cur += Math.floor(Math.random()*15);
+            cur += Math.floor(Math.random()*25);
             el.innerText = '$' + cur.toLocaleString();
-        }, 1200);
+        }, 1000);
     </script>
 </body>
 </html>
